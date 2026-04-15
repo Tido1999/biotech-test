@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>技術士一次試験 生物工学部門 過去問</title>
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0ede8;
+    --border: #e0dbd4;
+    --text: #1a1a18;
+    --text2: #6b6860;
+    --text3: #9b9890;
+    --green: #2d7a5a;
+    --green-bg: #eaf4ee;
+    --green-border: #a8d5bc;
+    --red: #c0392b;
+    --red-bg: #fdf0ee;
+    --red-border: #f0b8b2;
+    --accent: #2d7a5a;
+    --accent-light: #eaf4ee;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .header-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .header-sub { font-size: 12px; color: var(--text2); margin-top: 1px; }
+  .stats-mini { display: flex; gap: 12px; align-items: center; }
+  .stat-item { text-align: center; }
+  .stat-num { font-size: 18px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 10px; color: var(--text3); margin-top: 2px; }
+  main { max-width: 720px; margin: 0 auto; padding: 20px 16px 80px; }
+  .filter-row {
+    display: flex; gap: 8px; margin-bottom: 12px;
+    overflow-x: auto; padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--surface);
+    font-size: 13px; color: var(--text2); cursor: pointer;
+    transition: all 0.15s; font-family: inherit;
+  }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .filter-btn.wrong-filter { border-color: var(--red-border); color: var(--red); background: var(--red-bg); }
+  .filter-btn.wrong-filter.active { background: var(--red); border-color: var(--red); color: #fff; }
+  .filter-btn.unanswered-filter { border-color: #b8c8e0; color: #2d5a8a; background: #eef3fa; }
+  .filter-btn.unanswered-filter.active { background: #2d5a8a; border-color: #2d5a8a; color: #fff; }
+  .options-row {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 16px; gap: 8px;
+  }
+  .progress-text { font-size: 13px; color: var(--text2); }
+  .right-options { display: flex; align-items: center; gap: 12px; }
+  .toggle-wrap { display: flex; align-items: center; gap: 8px; }
+  .toggle-label { font-size: 13px; color: var(--text2); }
+  .toggle { position: relative; width: 38px; height: 22px; cursor: pointer; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-track {
+    position: absolute; inset: 0;
+    background: var(--border); border-radius: 11px; transition: background 0.2s;
+  }
+  .toggle input:checked + .toggle-track { background: var(--accent); }
+  .toggle-track::after {
+    content: ''; position: absolute;
+    width: 16px; height: 16px; left: 3px; top: 3px;
+    background: #fff; border-radius: 50%;
+    transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+  .reset-btn {
+    font-size: 12px; padding: 5px 12px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text2); cursor: pointer; font-family: inherit;
+  }
+  .reset-btn:hover { border-color: var(--red-border); color: var(--red); }
+  .sync-status {
+    font-size: 11px; color: var(--text3);
+    display: flex; align-items: center; gap: 6px; margin-bottom: 12px;
+  }
+  .sync-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text3); flex-shrink: 0;
+  }
+  .sync-dot.syncing { background: #e8a020; animation: pulse 1s infinite; }
+  .sync-dot.ok { background: var(--green); }
+  .sync-dot.error { background: var(--red); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .question-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
+  }
+  .q-meta { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tag {
+    font-size: 11px; padding: 3px 10px; border-radius: 20px;
+    border: 1px solid var(--border); color: var(--text2);
+    background: var(--surface2); font-weight: 500;
+  }
+  .tag.year { background: var(--accent-light); border-color: var(--green-border); color: var(--green); }
+  .q-text { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 18px; font-weight: 500; }
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 13px 15px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border); background: var(--surface2);
+    cursor: pointer; transition: border-color 0.15s, background 0.15s;
+    font-size: 14px; line-height: 1.65; color: var(--text);
+    text-align: left; font-family: inherit; width: 100%;
+  }
+  .choice:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); }
+  .choice-num {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--border); color: var(--text2);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px; transition: background 0.15s, color 0.15s;
+  }
+  .choice.correct { border-color: var(--green-border); background: var(--green-bg); color: var(--green); }
+  .choice.correct .choice-num { background: var(--green); color: #fff; }
+  .choice.wrong { border-color: var(--red-border); background: var(--red-bg); color: var(--red); }
+  .choice.wrong .choice-num { background: var(--red); color: #fff; }
+  .choice.reveal { border-color: var(--green-border); background: var(--green-bg); color: var(--green); }
+  .choice.reveal .choice-num { background: var(--green); color: #fff; }
+  .choice:disabled { cursor: default; }
+  .result-area { margin-top: 14px; }
+  .result-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 600;
+    padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 12px;
+  }
+  .result-label.correct { background: var(--green-bg); color: var(--green); }
+  .result-label.wrong { background: var(--red-bg); color: var(--red); }
+  .result-icon {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+  .result-label.correct .result-icon { background: var(--green); color: #fff; }
+  .result-label.wrong .result-icon { background: var(--red); color: #fff; }
+  .explanation {
+    background: var(--surface2);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px; font-size: 13.5px; line-height: 1.75; color: var(--text);
+  }
+  .explanation-title {
+    font-size: 11px; font-weight: 700; color: var(--accent);
+    letter-spacing: 0.05em; margin-bottom: 6px;
+  }
+  .nav-row {
+    display: flex; justify-content: space-between;
+    align-items: center; gap: 10px; margin-top: 4px;
+  }
+  .nav-btn {
+    padding: 10px 20px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border); background: var(--surface);
+    font-size: 14px; color: var(--text); cursor: pointer;
+    font-family: inherit; transition: border-color 0.15s; font-weight: 500;
+  }
+  .nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .nav-center { font-size: 13px; color: var(--text2); text-align: center; }
+  .empty-state {
+    text-align: center; padding: 40px 20px;
+    color: var(--text2); font-size: 14px; line-height: 1.8;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4); z-index: 200;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--surface); border-radius: var(--radius);
+    padding: 24px; max-width: 320px; width: 100%;
+    border: 1px solid var(--border);
+  }
+  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+  .modal p { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
+  .modal-btns { display: flex; gap: 10px; }
+  .modal-btn {
+    flex: 1; padding: 10px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border); font-size: 14px;
+    cursor: pointer; font-family: inherit; font-weight: 500;
+  }
+  .modal-btn.danger { background: var(--red); border-color: var(--red); color: #fff; }
+  .modal-btn.cancel { background: var(--surface); color: var(--text); }
+  @media (max-width: 480px) {
+    .header-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .stats-mini { gap: 16px; }
+    .question-card { padding: 16px; }
+    .choice { padding: 11px 12px; font-size: 13.5px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="header-title">技術士一次試験 過去問</div>
+      <div class="header-sub">生物工学部門（専門科目）</div>
+    </div>
+    <div class="stats-mini">
+      <div class="stat-item"><div class="stat-num" id="h-answered">0</div><div class="stat-label">回答済</div></div>
+      <div class="stat-item"><div class="stat-num" id="h-correct">0</div><div class="stat-label">正解</div></div>
+      <div class="stat-item"><div class="stat-num" id="h-rate">—</div><div class="stat-label">正答率</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="filter-row" id="filter-row"></div>
+
+  <div class="options-row">
+    <div class="progress-text" id="progress-text"></div>
+    <div class="right-options">
+      <button class="reset-btn" onclick="showResetModal()">履歴リセット</button>
+      <div class="toggle-wrap">
+        <span class="toggle-label">シャッフル</span>
+        <label class="toggle">
+          <input type="checkbox" id="shuffle-toggle">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="sync-status">
+    <span class="sync-dot" id="sync-dot"></span>
+    <span id="sync-text">読み込み中...</span>
+  </div>
+
+  <div id="question-area">
+    <div class="question-card">
+      <div class="q-meta" id="q-meta"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="choices" id="choices"></div>
+      <div class="result-area" id="result-area" style="display:none"></div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn" id="btn-prev" onclick="move(-1)">← 前へ</button>
+      <div class="nav-center" id="nav-center"></div>
+      <button class="nav-btn" id="btn-next" onclick="move(1)">次へ →</button>
+    </div>
+  </div>
+
+  <div id="empty-area" style="display:none">
+    <div class="empty-state">該当する問題がありません。</div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="reset-modal">
+  <div class="modal">
+    <h3>履歴をリセット</h3>
+    <p>すべての回答履歴・正答率がこのデバイスから削除されます。この操作は元に戻せません。</p>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="hideResetModal()">キャンセル</button>
+      <button class="modal-btn danger" onclick="resetAll()">リセットする</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 設定
+// ============================================================
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwgvvP4yQvwB0kbS_aXg26FDDoMZIp1RKLe4EE2A_270T3WtvF_eIKKmEdzTcJ6KiKLMg/exec';
+const STORAGE_KEY = 'biotech_quiz_v1';
+
+// ============================================================
+// 問題データ
+// ※ answer は 0始まりのインデックス（0=ア, 1=イ, 2=ウ, 3=エ, 4=オ）
+// ============================================================
+const questions = [
+  {
+    year: "令和5年度",
+    no: "問1",
+    text: "DNAの複製に関する次の記述のうち、最も適切なものはどれか。",
+    choices: [
+      "DNAポリメラーゼはDNA鎖を3'→5'方向に合成する。",
+      "ラギング鎖は不連続に合成され、岡崎フラグメントが生じる。",
+      "プライマーはDNAポリメラーゼによって合成される。",
+      "DNA複製は保存的複製であり、もとの二本鎖がそのまま保たれる。",
+      "真核生物のDNA複製は複数の起点から始まることはない。"
+    ],
+    answer: 1,
+    explanation: "DNA複製は半保存的複製であり、ラギング鎖（遅れ鎖）は5'→3'方向にしか合成できないため、不連続に岡崎フラグメントとして合成される。DNAポリメラーゼは5'→3'方向に合成し、プライマーはRNAポリメラーゼ（プリマーゼ）が合成する。真核生物では複数の複製起点から同時に複製が進行する。"
+  },
+  {
+    year: "令和5年度",
+    no: "問2",
+    text: "PCR（ポリメラーゼ連鎖反応）法に関する次の記述のうち、最も不適切なものはどれか。",
+    choices: [
+      "変性（denaturation）の工程では、二本鎖DNAを一本鎖に解離させる。",
+      "アニーリング工程では、プライマーが鋳型DNAに結合する。",
+      "Taq DNAポリメラーゼは高温でも安定して働く耐熱性酵素である。",
+      "PCRによって増幅された産物はRNAである。",
+      "伸長工程ではDNA鎖が新たに合成される。"
+    ],
+    answer: 3,
+    explanation: "PCRによって増幅される産物はDNAである（RNAではない）。PCRはDNA鎖を鋳型として、耐熱性のTaq DNAポリメラーゼを用いてDNAを増幅する技術である。変性・アニーリング・伸長の3ステップを繰り返すことで目的のDNA断片が指数的に増幅される。"
+  },
+  {
+    year: "令和4年度",
+    no: "問1",
+    text: "酵素に関する次の記述のうち、最も適切なものはどれか。",
+    choices: [
+      "酵素は反応の前後で自身も変化し消費される。",
+      "競合阻害剤は酵素の最大反応速度（Vmax）を低下させる。",
+      "Km値が小さいほど、基質に対する親和性が高いことを示す。",
+      "アロステリック酵素はミカエリス-メンテン式に従う。",
+      "補酵素は酵素のアミノ酸配列によって構成される。"
+    ],
+    answer: 2,
+    explanation: "Km（ミカエリス定数）は反応速度が最大速度の半分になるときの基質濃度であり、Km値が小さいほど少ない基質濃度で最大速度の半分に達するため、基質への親和性が高い。競合阻害剤はKmを見かけ上増加させるがVmaxは変化しない。酵素は触媒として反応後も変化しない。"
+  },
+  {
+    year: "令和4年度",
+    no: "問2",
+    text: "大腸菌を用いた組換えタンパク質の発現に関する次の記述のうち、最も不適切なものはどれか。",
+    choices: [
+      "発現ベクターには目的遺伝子の上流にプロモーター配列が必要である。",
+      "封入体として発現したタンパク質は可溶化・リフォールディングが必要な場合がある。",
+      "大腸菌は真核生物と同じ翻訳後修飾を行うことができる。",
+      "His-tagを付加することで金属アフィニティクロマトグラフィーによる精製が可能になる。",
+      "大腸菌ではコドン使用頻度が真核生物と異なる場合がある。"
+    ],
+    answer: 2,
+    explanation: "大腸菌（原核生物）は糖鎖付加やジスルフィド結合形成など、真核生物が行う多くの翻訳後修飾を行うことができない。そのため、糖タンパク質などの発現には酵母や昆虫細胞、哺乳類細胞など真核生物の発現系が用いられる。"
+  },
+  {
+    year: "令和3年度",
+    no: "問1",
+    text: "細胞培養に関する次の記述のうち、最も適切なものはどれか。",
+    choices: [
+      "継代培養とは、培養細胞を新しい培養容器に移し増殖を継続させることである。",
+      "CO2インキュベーターでは酸素濃度の調整のみが目的である。",
+      "浮遊培養細胞はすべて足場依存性を持つ。",
+      "無血清培地には動物由来の成分が一切含まれない。",
+      "細胞のコンフルエントとは、培養液が細胞で飽和した状態を指す。"
+    ],
+    answer: 0,
+    explanation: "継代培養（subculture/passage）とは、増殖した培養細胞の一部を新しい培地・培養容器に移して培養を継続する操作のことである。CO2インキュベーターはpH調整と温度・湿度管理が主目的。コンフルエントとは培養容器の底面が細胞で覆われた状態を指す。"
+  }
+];
+
+// ============================================================
+// 状態
+// ============================================================
+let answered = {};
+let isShuffle = false;
+let shuffleOrders = {};
+let activeFilter = 'all';
+let filteredQuestions = [];
+let current = 0;
+
+function qKey(q) { return q.year + '_' + q.no; }
+
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) answered = JSON.parse(raw);
+  } catch(e) { answered = {}; }
+}
+
+function saveLocal() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(answered)); } catch(e) {}
+}
+
+function setSyncStatus(state, text) {
+  document.getElementById('sync-dot').className = 'sync-dot ' + state;
+  document.getElementById('sync-text').textContent = text;
+}
+
+// スプレッドシートから履歴を取得（起動時に呼ぶ）
+function loadFromSheet() {
+  setSyncStatus('syncing', '履歴をスプレッドシートから読み込み中...');
+  fetch(GAS_URL)
+    .then(r => r.json())
+    .then(rows => {
+      if (Array.isArray(rows) && rows.length > 1) {
+        // 最新の回答を優先するため行を順番に上書き
+        rows.slice(1).forEach(row => {
+          const [, year, no, correct, answeredIdx] = row;
+          if (!year || !no) return;
+          const key = year + '_' + no;
+          answered[key] = {
+            answeredIdx: Number(answeredIdx),
+            correct: correct === true || correct === 'TRUE' || correct === 'true'
+          };
+        });
+        saveLocal();
+      }
+      setSyncStatus('ok', '同期済み');
+      render();
+    })
+    .catch(() => {
+      setSyncStatus('error', 'オフライン（ローカル履歴を使用中）');
+      render();
+    });
+}
+
+// スプレッドシートに回答を送信
+function saveToSheet(q, answeredIdx, correct) {
+  setSyncStatus('syncing', '保存中...');
+  fetch(GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify({ year: q.year, no: q.no, correct, answered_idx: answeredIdx }),
+    headers: { 'Content-Type': 'text/plain' }
+  })
+    .then(r => r.json())
+    .then(() => setSyncStatus('ok', '保存しました'))
+    .catch(() => setSyncStatus('error', '保存失敗（ローカルには記録済み）'));
+}
+
+// ============================================================
+// フィルター
+// ============================================================
+function buildFilters() {
+  const years = [...new Set(questions.map(q => q.year))].sort().reverse();
+  const row = document.getElementById('filter-row');
+  row.innerHTML = '';
+  const filters = [
+    { id: 'all',        label: 'すべて',       cls: '' },
+    { id: 'wrong',      label: '間違えた問題', cls: 'wrong-filter' },
+    { id: 'unanswered', label: '未回答',       cls: 'unanswered-filter' },
+  ];
+  filters.forEach(f => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn ' + f.cls + (activeFilter === f.id ? ' active' : '');
+    btn.textContent = f.label;
+    btn.dataset.filter = f.id;
+    btn.onclick = () => setFilter(f.id);
+    row.appendChild(btn);
+  });
+  years.forEach(y => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn' + (activeFilter === y ? ' active' : '');
+    btn.textContent = y;
+    btn.dataset.filter = y;
+    btn.onclick = () => setFilter(y);
+    row.appendChild(btn);
+  });
+}
+
+function setFilter(filter) {
+  activeFilter = filter;
+  current = 0;
+  shuffleOrders = {};
+  render();
+}
+
+function applyFilter() {
+  if (activeFilter === 'all') {
+    filteredQuestions = [...questions];
+  } else if (activeFilter === 'wrong') {
+    filteredQuestions = questions.filter(q => { const h = answered[qKey(q)]; return h && !h.correct; });
+  } else if (activeFilter === 'unanswered') {
+    filteredQuestions = questions.filter(q => !answered[qKey(q)]);
+  } else {
+    filteredQuestions = questions.filter(q => q.year === activeFilter);
+  }
+}
+
+// ============================================================
+// 描画
+// ============================================================
+function getShuffleOrder(qIdx) {
+  if (!shuffleOrders[qIdx]) {
+    let order = questions[qIdx].choices.map((_, i) => i);
+    if (isShuffle) {
+      for (let i = order.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [order[i], order[j]] = [order[j], order[i]];
+      }
+    }
+    shuffleOrders[qIdx] = order;
+  }
+  return shuffleOrders[qIdx];
+}
+
+function render() {
+  applyFilter();
+  buildFilters();
+  updateStats();
+
+  const qa = document.getElementById('question-area');
+  const ea = document.getElementById('empty-area');
+
+  if (filteredQuestions.length === 0) {
+    qa.style.display = 'none';
+    ea.style.display = 'block';
+    document.getElementById('progress-text').textContent = '0問';
+    return;
+  }
+
+  qa.style.display = 'block';
+  ea.style.display = 'none';
+  if (current >= filteredQuestions.length) current = 0;
+
+  const q = filteredQuestions[current];
+  const qIdx = questions.indexOf(q);
+  const key = qKey(q);
+  const history = answered[key];
+
+  document.getElementById('q-meta').innerHTML =
+    '<span class="tag year">' + q.year + '</span><span class="tag">' + q.no + '</span>';
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('progress-text').textContent = (current + 1) + ' / ' + filteredQuestions.length + ' 問';
+  document.getElementById('nav-center').textContent = (current + 1) + ' / ' + filteredQuestions.length;
+  document.getElementById('btn-prev').disabled = current === 0;
+  document.getElementById('btn-next').disabled = current === filteredQuestions.length - 1;
+
+  const labels = ['ア', 'イ', 'ウ', 'エ', 'オ'];
+  const order = getShuffleOrder(qIdx);
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  order.forEach((origIdx, dispIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.innerHTML = '<span class="choice-num">' + labels[dispIdx] + '</span><span>' + q.choices[origIdx] + '</span>';
+    if (history) {
+      btn.disabled = true;
+      if (origIdx === q.answer) btn.classList.add(history.answeredIdx === origIdx ? 'correct' : 'reveal');
+      else if (origIdx === history.answeredIdx) btn.classList.add('wrong');
+    } else {
+      btn.onclick = () => selectAnswer(q, qIdx, origIdx);
+    }
+    choicesEl.appendChild(btn);
+  });
+
+  const ra = document.getElementById('result-area');
+  if (history) {
+    ra.style.display = 'block';
+    ra.innerHTML =
+      '<div class="result-label ' + (history.correct ? 'correct' : 'wrong') + '">' +
+        '<span class="result-icon">' + (history.correct ? '○' : '×') + '</span>' +
+        (history.correct ? '正解！' : '不正解。正しい選択肢を確認してください。') +
+      '</div>' +
+      '<div class="explanation">' +
+        '<div class="explanation-title">解説</div>' +
+        q.explanation +
+      '</div>';
+  } else {
+    ra.style.display = 'none';
+  }
+}
+
+function selectAnswer(q, qIdx, origIdx) {
+  const key = qKey(q);
+  if (answered[key]) return;
+  const correct = origIdx === q.answer;
+  answered[key] = { answeredIdx: origIdx, correct };
+  saveLocal();
+  saveToSheet(q, origIdx, correct);
+  render();
+}
+
+function move(dir) {
+  current = Math.max(0, Math.min(filteredQuestions.length - 1, current + dir));
+  render();
+}
+
+function updateStats() {
+  const keys = Object.keys(answered);
+  const total = keys.length;
+  const correctCount = keys.filter(k => answered[k].correct).length;
+  document.getElementById('h-answered').textContent = total;
+  document.getElementById('h-correct').textContent = correctCount;
+  document.getElementById('h-rate').textContent = total > 0 ? Math.round(correctCount / total * 100) + '%' : '—';
+}
+
+function showResetModal() { document.getElementById('reset-modal').classList.add('show'); }
+function hideResetModal() { document.getElementById('reset-modal').classList.remove('show'); }
+function resetAll() {
+  answered = {};
+  shuffleOrders = {};
+  saveLocal();
+  hideResetModal();
+  setSyncStatus('ok', 'リセット完了（スプレッドシートの記録は残ります）');
+  render();
+}
+
+document.getElementById('shuffle-toggle').addEventListener('change', function() {
+  isShuffle = this.checked;
+  shuffleOrders = {};
+  render();
+});
+
+// 起動
+loadLocal();
+render();
+loadFromSheet();
+</script>
+</body>
+</html>
