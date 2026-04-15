@@ -6,224 +6,100 @@
 <title>技術士一次試験 生物工学部門 過去問</title>
 <style>
   :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --surface2: #f0ede8;
-    --border: #e0dbd4;
-    --text: #1a1a18;
-    --text2: #6b6860;
-    --text3: #9b9890;
-    --green: #2d7a5a;
-    --green-bg: #eaf4ee;
-    --green-border: #a8d5bc;
-    --red: #c0392b;
-    --red-bg: #fdf0ee;
-    --red-border: #f0b8b2;
-    --accent: #2d7a5a;
-    --accent-light: #eaf4ee;
-    --radius: 12px;
-    --radius-sm: 8px;
+    --bg:#f5f4f0;--surface:#fff;--surface2:#f0ede8;--border:#e0dbd4;
+    --text:#1a1a18;--text2:#6b6860;--text3:#9b9890;
+    --green:#2d7a5a;--green-bg:#eaf4ee;--green-border:#a8d5bc;
+    --red:#c0392b;--red-bg:#fdf0ee;--red-border:#f0b8b2;
+    --accent:#2d7a5a;--accent-light:#eaf4ee;
+    --radius:12px;--radius-sm:8px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.7;
-  }
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header-inner {
-    max-width: 720px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .header-title { font-size: 14px; font-weight: 600; color: var(--text); }
-  .header-sub { font-size: 12px; color: var(--text2); margin-top: 1px; }
-  .stats-mini { display: flex; gap: 12px; align-items: center; }
-  .stat-item { text-align: center; }
-  .stat-num { font-size: 18px; font-weight: 700; color: var(--accent); line-height: 1; }
-  .stat-label { font-size: 10px; color: var(--text3); margin-top: 2px; }
-  main { max-width: 720px; margin: 0 auto; padding: 20px 16px 80px; }
-  .filter-row {
-    display: flex; gap: 8px; margin-bottom: 12px;
-    overflow-x: auto; padding-bottom: 4px;
-    -webkit-overflow-scrolling: touch;
-  }
-  .filter-row::-webkit-scrollbar { display: none; }
-  .filter-btn {
-    flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
-    border: 1px solid var(--border); background: var(--surface);
-    font-size: 13px; color: var(--text2); cursor: pointer;
-    transition: all 0.15s; font-family: inherit;
-  }
-  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .filter-btn.wrong-filter { border-color: var(--red-border); color: var(--red); background: var(--red-bg); }
-  .filter-btn.wrong-filter.active { background: var(--red); border-color: var(--red); color: #fff; }
-  .filter-btn.unanswered-filter { border-color: #b8c8e0; color: #2d5a8a; background: #eef3fa; }
-  .filter-btn.unanswered-filter.active { background: #2d5a8a; border-color: #2d5a8a; color: #fff; }
-  .options-row {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 16px; gap: 8px;
-  }
-  .progress-text { font-size: 13px; color: var(--text2); }
-  .right-options { display: flex; align-items: center; gap: 12px; }
-  .toggle-wrap { display: flex; align-items: center; gap: 8px; }
-  .toggle-label { font-size: 13px; color: var(--text2); }
-  .toggle { position: relative; width: 38px; height: 22px; cursor: pointer; }
-  .toggle input { opacity: 0; width: 0; height: 0; }
-  .toggle-track {
-    position: absolute; inset: 0;
-    background: var(--border); border-radius: 11px; transition: background 0.2s;
-  }
-  .toggle input:checked + .toggle-track { background: var(--accent); }
-  .toggle-track::after {
-    content: ''; position: absolute;
-    width: 16px; height: 16px; left: 3px; top: 3px;
-    background: #fff; border-radius: 50%;
-    transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-  }
-  .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
-  .reset-btn {
-    font-size: 12px; padding: 5px 12px; border-radius: 20px;
-    border: 1px solid var(--border); background: var(--surface);
-    color: var(--text2); cursor: pointer; font-family: inherit;
-  }
-  .reset-btn:hover { border-color: var(--red-border); color: var(--red); }
-  .sync-status {
-    font-size: 11px; color: var(--text3);
-    display: flex; align-items: center; gap: 6px; margin-bottom: 12px;
-  }
-  .sync-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--text3); flex-shrink: 0;
-  }
-  .sync-dot.syncing { background: #e8a020; animation: pulse 1s infinite; }
-  .sync-dot.ok { background: var(--green); }
-  .sync-dot.error { background: var(--red); }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .question-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
-  }
-  .q-meta { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-  .tag {
-    font-size: 11px; padding: 3px 10px; border-radius: 20px;
-    border: 1px solid var(--border); color: var(--text2);
-    background: var(--surface2); font-weight: 500;
-  }
-  .tag.year { background: var(--accent-light); border-color: var(--green-border); color: var(--green); }
-  .q-text { font-size: 15px; line-height: 1.75; color: var(--text); margin-bottom: 18px; font-weight: 500; }
-  .choices { display: flex; flex-direction: column; gap: 10px; }
-  .choice {
-    display: flex; align-items: flex-start; gap: 12px;
-    padding: 13px 15px; border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border); background: var(--surface2);
-    cursor: pointer; transition: border-color 0.15s, background 0.15s;
-    font-size: 14px; line-height: 1.65; color: var(--text);
-    text-align: left; font-family: inherit; width: 100%;
-  }
-  .choice:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); }
-  .choice-num {
-    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
-    background: var(--border); color: var(--text2);
-    font-size: 12px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    margin-top: 1px; transition: background 0.15s, color 0.15s;
-  }
-  .choice.correct { border-color: var(--green-border); background: var(--green-bg); color: var(--green); }
-  .choice.correct .choice-num { background: var(--green); color: #fff; }
-  .choice.wrong { border-color: var(--red-border); background: var(--red-bg); color: var(--red); }
-  .choice.wrong .choice-num { background: var(--red); color: #fff; }
-  .choice.reveal { border-color: var(--green-border); background: var(--green-bg); color: var(--green); }
-  .choice.reveal .choice-num { background: var(--green); color: #fff; }
-  .choice:disabled { cursor: default; }
-  .result-area { margin-top: 14px; }
-  .result-label {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 14px; font-weight: 600;
-    padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 12px;
-  }
-  .result-label.correct { background: var(--green-bg); color: var(--green); }
-  .result-label.wrong { background: var(--red-bg); color: var(--red); }
-  .result-icon {
-    width: 20px; height: 20px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; flex-shrink: 0;
-  }
-  .result-label.correct .result-icon { background: var(--green); color: #fff; }
-  .result-label.wrong .result-icon { background: var(--red); color: #fff; }
-  .explanation {
-    background: var(--surface2);
-    border-left: 3px solid var(--accent);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    padding: 14px 16px; font-size: 13.5px; line-height: 1.75; color: var(--text);
-  }
-  .explanation-title {
-    font-size: 11px; font-weight: 700; color: var(--accent);
-    letter-spacing: 0.05em; margin-bottom: 6px;
-  }
-  .nav-row {
-    display: flex; justify-content: space-between;
-    align-items: center; gap: 10px; margin-top: 4px;
-  }
-  .nav-btn {
-    padding: 10px 20px; border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border); background: var(--surface);
-    font-size: 14px; color: var(--text); cursor: pointer;
-    font-family: inherit; transition: border-color 0.15s; font-weight: 500;
-  }
-  .nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-  .nav-btn:disabled { opacity: 0.3; cursor: default; }
-  .nav-center { font-size: 13px; color: var(--text2); text-align: center; }
-  .empty-state {
-    text-align: center; padding: 40px 20px;
-    color: var(--text2); font-size: 14px; line-height: 1.8;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius);
-  }
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.4); z-index: 200;
-    align-items: center; justify-content: center; padding: 20px;
-  }
-  .modal-overlay.show { display: flex; }
-  .modal {
-    background: var(--surface); border-radius: var(--radius);
-    padding: 24px; max-width: 320px; width: 100%;
-    border: 1px solid var(--border);
-  }
-  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
-  .modal p { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
-  .modal-btns { display: flex; gap: 10px; }
-  .modal-btn {
-    flex: 1; padding: 10px; border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border); font-size: 14px;
-    cursor: pointer; font-family: inherit; font-weight: 500;
-  }
-  .modal-btn.danger { background: var(--red); border-color: var(--red); color: #fff; }
-  .modal-btn.cancel { background: var(--surface); color: var(--text); }
-  @media (max-width: 480px) {
-    .header-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .stats-mini { gap: 16px; }
-    .question-card { padding: 16px; }
-    .choice { padding: 11px 12px; font-size: 13.5px; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.7;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 20px;position:sticky;top:0;z-index:100;}
+  .header-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .header-title{font-size:14px;font-weight:600;}
+  .header-sub{font-size:12px;color:var(--text2);margin-top:1px;}
+  .stats-mini{display:flex;gap:12px;}
+  .stat-item{text-align:center;}
+  .stat-num{font-size:18px;font-weight:700;color:var(--accent);line-height:1;}
+  .stat-label{font-size:10px;color:var(--text3);margin-top:2px;}
+  main{max-width:720px;margin:0 auto;padding:20px 16px 80px;}
+  .filter-row{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+  .filter-row::-webkit-scrollbar{display:none;}
+  .filter-btn{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;font-family:inherit;}
+  .filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .filter-btn.wrong-f{border-color:var(--red-border);color:var(--red);background:var(--red-bg);}
+  .filter-btn.wrong-f.active{background:var(--red);border-color:var(--red);color:#fff;}
+  .filter-btn.unanswered-f{border-color:#b8c8e0;color:#2d5a8a;background:#eef3fa;}
+  .filter-btn.unanswered-f.active{background:#2d5a8a;border-color:#2d5a8a;color:#fff;}
+  .options-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:8px;}
+  .progress-text{font-size:13px;color:var(--text2);}
+  .right-options{display:flex;align-items:center;gap:12px;}
+  .toggle-wrap{display:flex;align-items:center;gap:8px;}
+  .toggle-label{font-size:13px;color:var(--text2);}
+  .toggle{position:relative;width:38px;height:22px;cursor:pointer;}
+  .toggle input{opacity:0;width:0;height:0;}
+  .toggle-track{position:absolute;inset:0;background:var(--border);border-radius:11px;transition:background .2s;}
+  .toggle input:checked+.toggle-track{background:var(--accent);}
+  .toggle-track::after{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15);}
+  .toggle input:checked+.toggle-track::after{transform:translateX(16px);}
+  .reset-btn{font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;font-family:inherit;}
+  .reset-btn:hover{border-color:var(--red-border);color:var(--red);}
+  .sync-status{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px;margin-bottom:12px;}
+  .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+  .sync-dot.syncing{background:#e8a020;animation:pulse 1s infinite;}
+  .sync-dot.ok{background:var(--green);}
+  .sync-dot.error{background:var(--red);}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .question-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;}
+  .q-meta{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .tag{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--text2);background:var(--surface2);font-weight:500;}
+  .tag.year{background:var(--accent-light);border-color:var(--green-border);color:var(--green);}
+  .q-text{font-size:15px;line-height:1.75;color:var(--text);margin-bottom:18px;font-weight:500;}
+  .choices{display:flex;flex-direction:column;gap:10px;}
+  .choice{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--surface2);cursor:pointer;transition:border-color .15s,background .15s;font-size:14px;line-height:1.65;color:var(--text);text-align:left;font-family:inherit;width:100%;}
+  .choice:hover:not(:disabled){border-color:var(--accent);background:var(--accent-light);}
+  .choice-num{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--border);color:var(--text2);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:background .15s,color .15s;}
+  .choice.correct{border-color:var(--green-border);background:var(--green-bg);color:var(--green);}
+  .choice.correct .choice-num{background:var(--green);color:#fff;}
+  .choice.wrong{border-color:var(--red-border);background:var(--red-bg);color:var(--red);}
+  .choice.wrong .choice-num{background:var(--red);color:#fff;}
+  .choice.reveal{border-color:var(--green-border);background:var(--green-bg);color:var(--green);}
+  .choice.reveal .choice-num{background:var(--green);color:#fff;}
+  .choice:disabled{cursor:default;}
+  .result-area{margin-top:14px;}
+  .result-label{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:10px 14px;border-radius:var(--radius-sm);margin-bottom:12px;}
+  .result-label.correct{background:var(--green-bg);color:var(--green);}
+  .result-label.wrong{background:var(--red-bg);color:var(--red);}
+  .result-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+  .result-label.correct .result-icon{background:var(--green);color:#fff;}
+  .result-label.wrong .result-icon{background:var(--red);color:#fff;}
+  .explanation{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:14px 16px;font-size:13.5px;line-height:1.75;}
+  .explanation-title{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.05em;margin-bottom:6px;}
+  .nav-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px;}
+  .nav-btn{padding:10px 20px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--surface);font-size:14px;color:var(--text);cursor:pointer;font-family:inherit;transition:border-color .15s;font-weight:500;}
+  .nav-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+  .nav-btn:disabled{opacity:.3;cursor:default;}
+  .nav-center{font-size:13px;color:var(--text2);text-align:center;}
+  .empty-state{text-align:center;padding:40px 20px;color:var(--text2);font-size:14px;line-height:1.8;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.show{display:flex;}
+  .modal{background:var(--surface);border-radius:var(--radius);padding:24px;max-width:320px;width:100%;border:1px solid var(--border);}
+  .modal h3{font-size:16px;font-weight:600;margin-bottom:10px;}
+  .modal p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px;}
+  .modal-btns{display:flex;gap:10px;}
+  .modal-btn{flex:1;padding:10px;border-radius:var(--radius-sm);border:1.5px solid var(--border);font-size:14px;cursor:pointer;font-family:inherit;font-weight:500;}
+  .modal-btn.danger{background:var(--red);border-color:var(--red);color:#fff;}
+  .modal-btn.cancel{background:var(--surface);color:var(--text);}
+  @media(max-width:480px){
+    .header-inner{flex-direction:column;align-items:flex-start;gap:8px;}
+    .stats-mini{gap:16px;}
+    .question-card{padding:16px;}
+    .choice{padding:11px 12px;font-size:13.5px;}
   }
 </style>
 </head>
 <body>
-
 <header>
   <div class="header-inner">
     <div>
@@ -240,26 +116,17 @@
 
 <main>
   <div class="filter-row" id="filter-row"></div>
-
   <div class="options-row">
     <div class="progress-text" id="progress-text"></div>
     <div class="right-options">
       <button class="reset-btn" onclick="showResetModal()">履歴リセット</button>
       <div class="toggle-wrap">
         <span class="toggle-label">シャッフル</span>
-        <label class="toggle">
-          <input type="checkbox" id="shuffle-toggle">
-          <span class="toggle-track"></span>
-        </label>
+        <label class="toggle"><input type="checkbox" id="shuffle-toggle"><span class="toggle-track"></span></label>
       </div>
     </div>
   </div>
-
-  <div class="sync-status">
-    <span class="sync-dot" id="sync-dot"></span>
-    <span id="sync-text">読み込み中...</span>
-  </div>
-
+  <div class="sync-status"><span class="sync-dot" id="sync-dot"></span><span id="sync-text">読み込み中...</span></div>
   <div id="question-area">
     <div class="question-card">
       <div class="q-meta" id="q-meta"></div>
@@ -273,10 +140,7 @@
       <button class="nav-btn" id="btn-next" onclick="move(1)">次へ →</button>
     </div>
   </div>
-
-  <div id="empty-area" style="display:none">
-    <div class="empty-state">該当する問題がありません。</div>
-  </div>
+  <div id="empty-area" style="display:none"><div class="empty-state">該当する問題がありません。</div></div>
 </main>
 
 <div class="modal-overlay" id="reset-modal">
@@ -291,336 +155,508 @@
 </div>
 
 <script>
-// ============================================================
-// 設定
-// ============================================================
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwgvvP4yQvwB0kbS_aXg26FDDoMZIp1RKLe4EE2A_270T3WtvF_eIKKmEdzTcJ6KiKLMg/exec';
-const STORAGE_KEY = 'biotech_quiz_v1';
+const GAS_URL='https://script.google.com/macros/s/AKfycbwgvvP4yQvwB0kbS_aXg26FDDoMZIp1RKLe4EE2A_270T3WtvF_eIKKmEdzTcJ6KiKLMg/exec';
+const STORAGE_KEY='biotech_quiz_v1';
 
-// ============================================================
-// 問題データ
-// ※ answer は 0始まりのインデックス（0=ア, 1=イ, 2=ウ, 3=エ, 4=オ）
-// ============================================================
-const questions = [
-  {
-    year: "令和5年度",
-    no: "問1",
-    text: "DNAの複製に関する次の記述のうち、最も適切なものはどれか。",
-    choices: [
-      "DNAポリメラーゼはDNA鎖を3'→5'方向に合成する。",
-      "ラギング鎖は不連続に合成され、岡崎フラグメントが生じる。",
-      "プライマーはDNAポリメラーゼによって合成される。",
-      "DNA複製は保存的複製であり、もとの二本鎖がそのまま保たれる。",
-      "真核生物のDNA複製は複数の起点から始まることはない。"
-    ],
-    answer: 1,
-    explanation: "DNA複製は半保存的複製であり、ラギング鎖（遅れ鎖）は5'→3'方向にしか合成できないため、不連続に岡崎フラグメントとして合成される。DNAポリメラーゼは5'→3'方向に合成し、プライマーはRNAポリメラーゼ（プリマーゼ）が合成する。真核生物では複数の複製起点から同時に複製が進行する。"
-  },
-  {
-    year: "令和5年度",
-    no: "問2",
-    text: "PCR（ポリメラーゼ連鎖反応）法に関する次の記述のうち、最も不適切なものはどれか。",
-    choices: [
-      "変性（denaturation）の工程では、二本鎖DNAを一本鎖に解離させる。",
-      "アニーリング工程では、プライマーが鋳型DNAに結合する。",
-      "Taq DNAポリメラーゼは高温でも安定して働く耐熱性酵素である。",
-      "PCRによって増幅された産物はRNAである。",
-      "伸長工程ではDNA鎖が新たに合成される。"
-    ],
-    answer: 3,
-    explanation: "PCRによって増幅される産物はDNAである（RNAではない）。PCRはDNA鎖を鋳型として、耐熱性のTaq DNAポリメラーゼを用いてDNAを増幅する技術である。変性・アニーリング・伸長の3ステップを繰り返すことで目的のDNA断片が指数的に増幅される。"
-  },
-  {
-    year: "令和4年度",
-    no: "問1",
-    text: "酵素に関する次の記述のうち、最も適切なものはどれか。",
-    choices: [
-      "酵素は反応の前後で自身も変化し消費される。",
-      "競合阻害剤は酵素の最大反応速度（Vmax）を低下させる。",
-      "Km値が小さいほど、基質に対する親和性が高いことを示す。",
-      "アロステリック酵素はミカエリス-メンテン式に従う。",
-      "補酵素は酵素のアミノ酸配列によって構成される。"
-    ],
-    answer: 2,
-    explanation: "Km（ミカエリス定数）は反応速度が最大速度の半分になるときの基質濃度であり、Km値が小さいほど少ない基質濃度で最大速度の半分に達するため、基質への親和性が高い。競合阻害剤はKmを見かけ上増加させるがVmaxは変化しない。酵素は触媒として反応後も変化しない。"
-  },
-  {
-    year: "令和4年度",
-    no: "問2",
-    text: "大腸菌を用いた組換えタンパク質の発現に関する次の記述のうち、最も不適切なものはどれか。",
-    choices: [
-      "発現ベクターには目的遺伝子の上流にプロモーター配列が必要である。",
-      "封入体として発現したタンパク質は可溶化・リフォールディングが必要な場合がある。",
-      "大腸菌は真核生物と同じ翻訳後修飾を行うことができる。",
-      "His-tagを付加することで金属アフィニティクロマトグラフィーによる精製が可能になる。",
-      "大腸菌ではコドン使用頻度が真核生物と異なる場合がある。"
-    ],
-    answer: 2,
-    explanation: "大腸菌（原核生物）は糖鎖付加やジスルフィド結合形成など、真核生物が行う多くの翻訳後修飾を行うことができない。そのため、糖タンパク質などの発現には酵母や昆虫細胞、哺乳類細胞など真核生物の発現系が用いられる。"
-  },
-  {
-    year: "令和3年度",
-    no: "問1",
-    text: "細胞培養に関する次の記述のうち、最も適切なものはどれか。",
-    choices: [
-      "継代培養とは、培養細胞を新しい培養容器に移し増殖を継続させることである。",
-      "CO2インキュベーターでは酸素濃度の調整のみが目的である。",
-      "浮遊培養細胞はすべて足場依存性を持つ。",
-      "無血清培地には動物由来の成分が一切含まれない。",
-      "細胞のコンフルエントとは、培養液が細胞で飽和した状態を指す。"
-    ],
-    answer: 0,
-    explanation: "継代培養（subculture/passage）とは、増殖した培養細胞の一部を新しい培地・培養容器に移して培養を継続する操作のことである。CO2インキュベーターはpH調整と温度・湿度管理が主目的。コンフルエントとは培養容器の底面が細胞で覆われた状態を指す。"
-  }
+// =====================================================
+// 問題データ（令和7年度 35問）
+// answer は 0始まりインデックス（0=①, 1=②, 2=③, 3=④, 4=⑤）
+// =====================================================
+const questions=[
+{year:"令和7年度",no:"問1",
+text:"DNAに関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"DNAは通常，2本のポリヌクレオチド鎖からなる右巻きの二重らせんである。",
+"AT間の水素結合は，GC間のものより不安定である。",
+"塩基はらせんの内側を向いており，リン酸とデオキシリボース部分はらせんの外側にある。",
+"溶液中のpHが4以下又は11以上の場合，DNAの二重らせん構造は変性しやすい。",
+"DNA中のプリン塩基（AとG）の物質量の合計と，ピリミジン塩基（CとT）の物質量の合計の比は，生物種によって異なる。"
+],answer:4,
+explanation:"シャルガフの規則により，二本鎖DNAではA=T，G=Cが成立するため，プリン塩基（A+G）の物質量とピリミジン塩基（C+T）の物質量の比は常に1:1となり，生物種によらず一定である。AT間の水素結合は2本，GC間は3本であるため，AT間の方が不安定というのは正しい。"},
+
+{year:"令和7年度",no:"問2",
+text:"部位特異的突然変異が翻訳産物であるタンパク質に与える影響に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"点突然変異の結果，コドンの変化により指定するアミノ酸が異なるアミノ酸に置換されることをミスセンス変異と呼ぶ。タンパク質の機能発現に重要なアミノ酸がこのような点突然変異により変化すると，その機能が低下する可能性がある。",
+"点突然変異が起きても指定するアミノ酸には変化が見られない場合がある。この場合には翻訳されたアミノ酸は野生型と変わらない。",
+"アミノ酸を指定するコドンが終止コドンに変化すると，翻訳はそこで終了する。この場合，そのタンパク質の機能が失われる場合が多い。",
+"1塩基欠失の場合には，読み枠は変化しないため，変異の位置から下流のアミノ酸配列は変化しない。",
+"3の倍数の塩基数の挿入は読み枠を維持するが，挿入されるアミノ酸配列の種類や数によっては，タンパク質の性質や挙動に深刻な影響を与えることがある。"
+],answer:3,
+explanation:"1塩基欠失はフレームシフト変異を引き起こす。読み枠がずれるため，変異位置以降のすべてのアミノ酸配列が変化し，機能を持たないタンパク質が生じることが多い。「読み枠は変化しない」という記述が誤り。3の倍数の塩基挿入では読み枠は維持される（選択肢⑤は正しい）。"},
+
+{year:"令和7年度",no:"問3",
+text:"アミノ酸に関する次の（ア）〜（オ）のうち，不適切なものの組合せはどれか。\n（ア）親水性アミノ酸 ……… バリン\n（イ）疎水性アミノ酸 ……… セリン\n（ウ）含硫アミノ酸 ………… メチオニン\n（エ）芳香族アミノ酸 ……… チロシン\n（オ）塩基性アミノ酸 ……… アルギニン",
+choices:["ア，イ","イ，ウ","ウ，エ","エ，オ","ア，オ"],
+answer:0,
+explanation:"バリンは側鎖にイソプロピル基（疎水性）を持つ疎水性アミノ酸であり，「親水性」という記述（ア）は誤り。セリンは側鎖に水酸基（-OH）を持つ親水性アミノ酸であり，「疎水性」という記述（イ）は誤り。したがって不適切な組合せは「ア，イ」。メチオニンは含硫アミノ酸（正しい），チロシンは芳香族アミノ酸（正しい），アルギニンは塩基性アミノ酸（正しい）。"},
+
+{year:"令和7年度",no:"問4",
+text:"エネルギー代謝に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"解糖系の反応はミトコンドリアで起こり，1分子のグルコースから3分子のピルビン酸と6分子のATPを生成する。",
+"ピルビン酸はミトコンドリア内膜を通過し，マトリックスでピルビン酸デヒドロゲナーゼ複合体によってアセチルCoAに変換される。",
+"クエン酸回路では，アセチルCoAのアセチル基がCO₂に酸化され，その過程で，GTP，NADH，FADH₂が生成される。",
+"ミトコンドリア内膜に存在する電子伝達系は，NADHとFADH₂からの電子伝達に伴うエネルギーを利用して膜内外にプロトンの濃度勾配を形成し，そのプロトンの濃度勾配を利用して，ATP合成酵素がATPを合成する。",
+"嫌気呼吸によって筋肉で作られた乳酸は肝臓に運ばれ，そこでピルビン酸に変換され，一部は糖新生によってグルコースに戻される。"
+],answer:0,
+explanation:"解糖系はミトコンドリアではなく細胞質基質（サイトゾル）で起こる。また，1分子のグルコースから2分子のピルビン酸と正味2分子のATPが生成される（3分子のピルビン酸や6分子のATPという記述は誤り）。"},
+
+{year:"令和7年度",no:"問5",
+text:"光合成色素であるクロロフィルと，植物の光合成活性に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"クロロフィルは，葉緑体内のチラコイド膜に存在し，特定の波長の光を効率よく吸収する。",
+"クロロフィルは，可視光スペクトルのうち，緑色の光を最も効率よく吸収するため，植物は緑色に見える。",
+"光化学系ⅡIの反応中心クロロフィルが光エネルギーで励起されると，分子から電子が放出される。電子を失った反応中心クロロフィルは，水分子の分解に関与する。",
+"カロテノイドなどの補助色素は，クロロフィルが吸収しない波長の光を吸収し，そのエネルギーを反応中心に伝達する機能がある。",
+"強すぎる光は，反応中心を損傷させ，光合成能を低下させる可能性がある。"
+],answer:1,
+explanation:"クロロフィルは緑色の光を最も効率よく吸収するのではなく，赤色光（約660〜680nm）と青紫色光（約430〜450nm）を主に吸収する。緑色光は吸収されずに反射・透過されるため，植物は緑色に見える。したがって「緑色の光を最も効率よく吸収する」という記述が誤り。"},
+
+{year:"令和7年度",no:"問6",
+text:"酵素反応に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"最大反応速度（Vmax）とは，反応液中の酵素が基質で飽和されているときに得られる反応速度である。",
+"ミカエリス定数（Km）は，最大反応速度（Vmax）の1/2の反応速度を与える基質濃度であり，酵素と基質の親和性が低いほど小さくなる。",
+"基質濃度がミカエリス定数（Km）よりも十分に低い場合，酵素反応の速度は基質濃度に比例する。",
+"競合阻害剤が存在する場合，最大反応速度（Vmax）は変化しないが，見かけのミカエリス定数（Km）は増大する。",
+"不競合阻害剤は，酵素－基質複合体のみに結合し，最大反応速度（Vmax）とミカエリス定数（Km）の両方を低下させる。"
+],answer:1,
+explanation:"Km（ミカエリス定数）は酵素と基質の親和性が低いほど大きくなる（Kmが大きいほど親和性が低い）。「親和性が低いほど小さくなる」という記述が誤り。Kmが小さいほど少ない基質濃度で反応速度がVmaxの半分に達することを意味し，親和性が高いことを示す。"},
+
+{year:"令和7年度",no:"問7",
+text:"クロマトグラフィーに関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"イオン交換クロマトグラフィーでは，目的溶質と競合して交換体荷電基を占拠するイオンの濃度を上げることにより目的溶質が溶出される。",
+"疎水性クロマトグラフィーでは，溶出液の塩濃度を上げるとタンパク質などが溶出される。",
+"ゲル濾過クロマトグラフィーは，タンパク質の分子量分画に用いられる。",
+"クロマトフォーカシング（等電点クロマトグラフィー）は，タンパク質などを等電点の差によって分離する方法である。",
+"アフィニティークロマトグラフィーでは，抗原と抗体のような互いに親和性を持つ物質の一方をリガンドとして支持体に固定化して用いる。"
+],answer:1,
+explanation:"疎水性クロマトグラフィーでは，高塩濃度条件でタンパク質が疎水性担体に結合し，塩濃度を下げる（または有機溶媒を加える）ことで溶出される。「塩濃度を上げるとタンパク質が溶出される」という記述が誤りで，逆の操作が正しい。"},
+
+{year:"令和7年度",no:"問8",
+text:"植物ホルモンに関する次の記述の，□に入る語句の組合せとして，最も適切なものはどれか。\n植物の発生，生理作用は植物ホルモンにより調節されている。[a]はイネの馬鹿苗病の原因物質として分離同定され，茎の伸長や発芽を促進する。[b]はエンドウの黄化芽生えの成長を変化させる能力があることで，成長調整物質として最初に同定され，果実の成熟作用も有する。幼葉鞘の屈曲の研究により発見された[c]は化学的にはインドール酢酸として同定され，適量であれば根部の成長を促進する。[d]は[c]の存在下で細胞増殖を誘導し，カルスからのシュート（芽，茎，葉）形成を誘導する。",
+choices:[
+"a:サイトカイニン　b:アブシシン酸　c:オーキシン　d:エチレン",
+"a:オーキシン　b:アブシシン酸　c:ジベレリン　d:サイトカイニン",
+"a:ジベレリン　b:エチレン　c:オーキシン　d:サイトカイニン",
+"a:ジベレリン　b:エチレン　c:サイトカイニン　d:オーキシン",
+"a:オーキシン　b:エチレン　c:サイトカイニン　d:アブシシン酸"
+],answer:2,
+explanation:"a=ジベレリン（イネの馬鹿苗病の原因物質，茎の伸長・発芽促進），b=エチレン（果実成熟），c=オーキシン（インドール酢酸，幼葉鞘の屈曲研究から発見），d=サイトカイニン（オーキシン存在下で細胞増殖・シュート形成誘導）。したがって選択肢③が正しい。"},
+
+{year:"令和7年度",no:"問9",
+text:"器具・試薬等の滅菌等の操作に関する次の記述のうち，その使用目的に対して最も不適切なものはどれか。",
+choices:[
+"寒天培地上の微生物のコロニーを採取する際に，使用する白金耳を火炎で赤熱させた。",
+"大腸菌を培養する実験の際，着用したゴム手袋の消毒のため，70%エタノール溶液を噴霧した。",
+"抗生物質を含む溶液を滅菌するため，孔径0.2μmのフィルターでろ過した。",
+"市販の滅菌済みプラスチック器具は，エチレンオキシドガスやγ線で滅菌されている。",
+"RNAの取扱いに用いる器具を滅菌するため，オートクレーブで121℃に加熱した。"
+],answer:4,
+explanation:"RNAはRNase（リボヌクレアーゼ）により容易に分解される。RNaseはオートクレーブによる加熱では完全に失活しない場合があり，RNA実験器具の処理にはDEPC（ジエチルピロカーボネート）処理水でのすすぎや，RNaseフリーの専用試薬・器具の使用が推奨される。オートクレーブは一般的な滅菌には有効だが，RNase除去には不十分なため不適切。"},
+
+{year:"令和7年度",no:"問10",
+text:"ある河川にA工場の排水が放流されている。放流地点の上流における河川流量は400,000m³/日，BOD濃度は1mg/Lであり，A工場の排水量は10,000m³/日，BOD濃度は100mg/Lである。放流地点の直下流における河川のBOD濃度を2mg/L以下にするために，A工場において排水処理を行うとき，最低限必要なBOD除去率として，最も適切な値はどれか。\nただし，排水処理場において排水量は変化せず，放流地点において河川水と工場排水は完全に混合されるものとする。",
+choices:["40%","42%","50%","58%","60%"],
+answer:3,
+explanation:"混合後のBOD濃度を求める。混合流量=400,000+10,000=410,000m³/日。混合後BOD≤2mg/Lとするための工場排水BOD上限をCとすると：(400,000×1+10,000×C)/410,000≤2 → 400,000+10,000C≤820,000 → 10,000C≤420,000 → C≤42mg/L。除去率=(100-42)/100=58%。よって最低限必要なBOD除去率は58%（選択肢④）。"},
+
+{year:"令和7年度",no:"問11",
+text:"コンポスト化（堆肥化）に関する次の記述の，□に入る語句の組合せとして，最も適切なものはどれか。\nコンポスト化の過程において，最初に糖を分解する細菌や[a]が繁殖すると，有機物を加水分解して，呼吸や発酵で温度は次第に上昇する。内部温度は60〜70℃にも達し，耐熱性の[b]が働いてヘミセルロースを分解する。この発熱により病原菌や寄生虫が死滅し，水分蒸発も起こる。また，次第に酸素が不足し，[c]の細菌が繁殖し，セルロースを分解する。そして，温度が低下してくると担子菌が繁殖して[d]を分解し，最終的には易分解性有機物が完全分解した安定した有機質（コンポスト）となる。",
+choices:[
+"a:糸状菌　b:放線菌　c:嫌気性　d:リグニン",
+"a:糸状菌　b:原生生物　c:好気性　d:ペプチド",
+"a:原生生物　b:糸状菌　c:嫌気性　d:リグニン",
+"a:原生生物　b:放線菌　c:嫌気性　d:リグニン",
+"a:放線菌　b:糸状菌　c:好気性　d:ペプチド"
+],answer:0,
+explanation:"コンポスト化では：a=糸状菌（初期段階で糖分解菌とともに繁殖），b=放線菌（高温に耐性を持ち，ヘミセルロース分解），c=嫌気性（酸素不足下でセルロース分解），d=リグニン（最終段階で担子菌がリグニンを分解）。選択肢①の組合せが正しい。"},
+
+{year:"令和7年度",no:"問12",
+text:"持続可能な航空燃料（SAF，Sustainable Aviation Fuel）の原料の生産菌として期待される微細藻類に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"微細藻類には，細胞内に油脂や炭化水素といった液体燃料として利用しやすい物質を大量に貯蔵する特性を持った種が数多く報告されている。",
+"野外培養池での微細藻類の培養においては，他の藻類や細菌，カビ，原生動物の侵襲を少なからず受けるが，培養対象の微細藻類とは粒径や比重が異なるため，容易に分離できる。",
+"微細藻類の培養液を脱水・分離する際に使う動力や熱がCO₂の排出につながり，バイオ燃料の温室効果ガス削減効果を打ち消す恐れがある。",
+"微細藻類を高速で増殖させるには，CO₂を人為的に培養液に溶解させる必要がある。",
+"微細藻類が生産した油脂や炭化水素などの回収には，有機溶媒を用いて抽出する方法の他に，微細藻類の菌体を高温高圧の条件下で水熱液化処理する方法が検討されている。"
+],answer:1,
+explanation:"野外培養池での微細藻類の培養では，他の生物（他藻類，細菌，カビ，原生動物）との混入・競合は避けられないが，粒径や比重が類似している場合も多く，「容易に分離できる」とは言えない。分離・精製は実際には困難であり，コンタミネーション対策が課題の一つとされている。"},
+
+{year:"令和7年度",no:"問13",
+text:"ノーベル賞受賞者の主な研究・業績に関する次の記述のうち，最も不適切なものはどれか。なお，選択肢の受賞年と受賞分野の記載は正しいものとする。",
+choices:[
+"2024年のノーベル生理学・医学賞は，マイクロRNAがmRNAの安定性や翻訳を調節することによって遺伝子発現を制御する仕組みを明らかにした「マイクロRNAと転写後遺伝子制御における役割の発見」に対して授与された。",
+"2024年のノーベル化学賞は，計算によって新たなタンパク質を設計・合成する技術と，タンパク質の立体構造を予測するAIモデルの開発を対象とした「タンパク質設計と立体構造予測」に対して授与された。",
+"2023年のノーベル生理学・医学賞は，人工的にmRNAを合成する際，アデニン（A）とリボースが結合したアデノシンを，構造がわずかに異なるN6-メチルアデノシンに置き換えることで，体内の炎症反応が劇的に抑えられることを発見した「mRNAワクチンを実現した修飾塩基の研究」に対して授与された。",
+"2022年の生理学・医学賞は，ゲノム比較によって現代人のゲノムに絶滅したネアンデルタール人やデニソワ人の遺伝情報の一部が残っていることを明らかにし，現生人類（ホモ・サピエンス）と旧人類が交配していたという生物学的な証拠を発見した「古代DNAの解析」に対して授与された。",
+"2020年のノーベル生理学・医学賞は，未知の肝炎の原因がウイルスであると予測し，そのウイルスの遺伝子配列を特定したうえで，チンパンジーへの感染実験によってその病原性を確認した「C型肝炎ウイルスの発見」に対して授与された。"
+],answer:2,
+explanation:"2023年のノーベル生理学・医学賞は，カタリン・カリコとドリュー・ワイスマンに授与された。彼らの研究は，mRNAのウリジン（U）をシュードウリジン（Ψ）に置換することで炎症反応を抑制し，mRNAワクチンを実用化した研究である。「アデノシンをN6-メチルアデノシンに置き換える」という記述は誤り。"},
+
+{year:"令和7年度",no:"問14",
+text:"バイオものづくり製品の社会実装に向け，ライフサイクルアセスメント（LCA）が求められるようになった。LCAに関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"LCAは，対象となる製品に関係する資源の採掘から，素材や部品の製造，組立，使用，廃棄に至る製品のライフサイクル全体を考慮する。",
+"LCAは，「目的及び調査範囲の設定」，「インベントリ分析」，「影響評価」，「解釈」の四つのフェーズで行われる。",
+"市場で競合する他社製品とのLCAの比較結果を公表する場合は，専門家によるクリティカルレビュー（LCAが決められた方法に準拠しているかのチェック）が必要である。",
+"LCAは，環境側面だけでなく，経済的及び社会的側面も評価する方法である。",
+"LCAの実施方法は，ISO（International Organization for Standardization，国際標準化機構）の規格で決められている。"
+],answer:3,
+explanation:"LCA（ライフサイクルアセスメント）は主に環境負荷を定量的に評価する手法であり，経済的側面や社会的側面を統合的に評価するものではない。経済的・社会的側面を含む評価には別のアセスメント手法（LCC：ライフサイクルコスト，S-LCA：社会的LCAなど）が用いられる。"},
+
+{year:"令和7年度",no:"問15",
+text:"保健機能食品（栄養機能食品，特定保健用食品（トクホ），機能性表示食品）に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"保健機能食品は，国が定めた安全性や有効性に関する基準などに従って食品の機能が表示されており，疾病の治療及び予防のために摂取される食品ではない。",
+"栄養機能食品は，既に科学的根拠が確認された栄養成分を一定の基準量含む食品であれば，製品ごとに厚生労働省に届出をすることで，国が定めた表現によって機能を表示することができる。",
+"トクホも機能性表示食品も科学的根拠に基づいた機能を表示した食品である。",
+"機能性表示食品は，その届出情報が消費者庁のウェブサイトで確認できる。",
+"トクホは，表示されている効果や安全性について，国が審査を行い，食品ごとに消費者庁長官が許可している。"
+],answer:1,
+explanation:"栄養機能食品は，規格基準型であり，国が定めた基準量の栄養成分を含む食品であれば，消費者庁への届出すら不要で自由に機能表示できる制度である。「製品ごとに厚生労働省に届出をする」という記述は誤り（届出不要かつ所管は消費者庁）。"},
+
+{year:"令和7年度",no:"問16",
+text:"「日本食品標準成分表」の栄養成分分析法に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"水分の測定法には，常圧加熱乾燥法，減圧加熱乾燥法，及びカールフィッシャー法などがある。",
+"たんぱく質の測定法には，アミノ酸組成から計算する方法，改良ケルダール法，自動分析装置を用いる方法などがある。",
+"炭水化物量の計算には，積み上げ法による計算方法，差し引き法による測定方法，及び全糖を測定する方法などがある。",
+"食物繊維の測定法には，AOAC.2011.25法，プロスキー変法，プロスキー法，及び難消化性でん粉測定法などがある。",
+"単糖，二糖，オリゴ糖，糖アルコール，及び有機酸の定量には，ガスクロマトグラフ法及び酵素法などがある。"
+],answer:4,
+explanation:"単糖，二糖，オリゴ糖，糖アルコール等の定量には，主にHPLC（高速液体クロマトグラフィー）法が用いられる。「ガスクロマトグラフ法及び酵素法」という記述は不適切で，有機酸の定量にはHPLC法などが用いられ，ガスクロマトグラフ法は脂肪酸分析などに使われる。"},
+
+{year:"令和7年度",no:"問17",
+text:"糖代謝に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"糖尿病はインスリン分泌が十分でない，又はインスリンがあっても十分に働かないために，血糖が高い状態が続く病気である。",
+"インスリンは膵臓から分泌されるホルモンの一種で，筋肉細胞や脂肪細胞などの細胞に血糖を取り込ませる働きをもつ。",
+"運動により骨格筋の量が増加すると，筋肉の糖取り込みが増加するため，インスリン抵抗性が改善される。",
+"GLP-1（glucagon-like peptide-1）及びGIP（glucose-dependent insulinotropic polypeptide）はインクレチンと呼ばれ，インスリン分泌を促進し，血糖降下作用をもつ消化管ホルモンの総称である。",
+"DPP-4（dipeptidyl peptidase-4）はインクレチンの作用を増強し，インスリン分泌を促進させる。"
+],answer:4,
+explanation:"DPP-4（ジペプチジルペプチダーゼ-4）はインクレチン（GLP-1やGIP）を分解・不活化する酵素である。DPP-4がインクレチンを分解することでインスリン分泌が抑制されるため，DPP-4阻害薬はインクレチンの分解を抑えてインスリン分泌を促進する治療薬として使われる。「DPP-4がインクレチンの作用を増強する」という記述は逆であり誤り。"},
+
+{year:"令和7年度",no:"問18",
+text:"回分培養，流加培養（半回分培養），連続培養の特徴に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"回分培養及び流加培養は，培養液量が一定に保たれる培養法である。",
+"回分培養に比べて，流加培養では菌体濃度と代謝産物の生産性を高めることができる。",
+"基質の濃度が高くなるとカタボライト抑制により目的生産物の生成が抑制される場合，流加培養によって，抑制が起きない濃度に保って培養することができる。",
+"連続培養の定常状態を達成する1つの方法として，供給する培地の流量と抜き取る培地の流量を一定にするケモスタットがある。",
+"回分培養では，培養中に基質濃度を調整できないが，流加培養では基質濃度を調整することができる。"
+],answer:0,
+explanation:"回分培養（バッチ培養）では培地を一括添加し，流入・流出がないため培養液量は基本的に一定である。しかし流加培養（フェッドバッチ培養）では，培養途中に培地を連続的または間欠的に添加するため，培養液量は増加していく。「流加培養は培養液量が一定に保たれる」という記述が誤り。"},
+
+{year:"令和7年度",no:"問19",
+text:"植物細胞壁はセルロースやヘミセルロースなどの多糖を含んでいる。これらの多糖を構成する単糖として，最も不適切なものはどれか。",
+choices:["アラビノース","キシロース","リボース","グルコース","ガラクトース"],
+answer:2,
+explanation:"リボースはRNAを構成する五炭糖であり，植物細胞壁の多糖成分ではない。アラビノース・キシロースはヘミセルロース，グルコースはセルロースとヘミセルロース，ガラクトースはヘミセルロースやペクチンなど細胞壁多糖の構成単糖として存在する。"},
+
+{year:"令和7年度",no:"問20",
+text:"農業や水産業において利用されている不稔化に関する次の記述のうち，最も適切なものはどれか。",
+choices:[
+"三倍体魚等は不稔化（不妊化）されているので，成熟に要する栄養供給が抑制され，肥育性に優れている。",
+"三倍体魚等の作出は，遺伝子そのものを改変する技術ではないが，遺伝子組換えやゲノム編集技術の1つとされている。",
+"種なしブドウの生産には，一般的にコルヒチン処理による不稔化が行われている。",
+"種子が多く食べにくいカンキツにおいて，ジベレリン処理により四倍体を作出し，これと他の品種を交配して三倍体化することにより作り出された無核性品種が流通している。",
+"親が三倍体である場合，生殖細胞も三倍体である。"
+],answer:0,
+explanation:"三倍体魚（サーモンなど）は不妊化（生殖腺の発達が抑制）されるため，生殖に使われるエネルギーが成長に回り，成長速度や肥育性が向上する。これが選択肢①の正しい記述。②は誤り（不稔化は遺伝子組換えやゲノム編集ではない）。③は誤り（種なしブドウはジベレリン処理）。④の記述は主語と手法が混在（カンキツの無核品種はコルヒチンと交配による）。⑤は誤り（三倍体では正常な減数分裂が起きないため生殖細胞は正常に形成されない）。"},
+
+{year:"令和7年度",no:"問21",
+text:"バイオリアクターに利用される酵素の固定化に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"酵素を一定空間に留めることができ，連続反応が可能になる。",
+"酵素と反応生成物の分離の容易化，生成物の収率や純度の向上が期待できる。",
+"投入する酵素の節約が見込まれる。",
+"酵素を固定化しても固定化前の酵素と比活性，pH安定性，熱安定性は同じである。",
+"固定化のための工程やコストが新たに発生する。"
+],answer:3,
+explanation:"酵素を固定化すると，担体との結合や立体構造の変化により，比活性（単位量あたりの活性）が低下することが多い。また，pH安定性や熱安定性は固定化によって変化（向上または低下）する場合がある。「固定化前と同じである」という記述は不適切。固定化による安定性向上はメリットとして期待される場合もあるが，常に同じではない。"},
+
+{year:"令和7年度",no:"問22",
+text:"ゲノム情報を活用した植物の育種に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"これまでにイネをはじめとしてダイズやトマトなどの主要な作物のゲノム情報が解読されており，ゲノム情報を活用したDNAマーカー選抜育種や，人工制限酵素を用いてゲノム上の特定の配列を書き換えることができるゲノム編集技術による育種が行われている。",
+"DNAマーカー選抜育種では，有用遺伝子付近のDNA配列を育種の際の目印として利用するため，対象農作物の生育初期に選抜することで育種期間の大幅な短縮が可能である。",
+"ゲノム編集技術により作製された高GABAトマトは，国内のグループにより開発された。",
+"ゲノム編集作物では，宿主のゲノムに人工ヌクレアーゼ遺伝子を組み込んだ場合であっても，最終的な作物から組み込まれた遺伝子を除去した場合はカルタヘナ法に規定された「遺伝子組換え生物等」には該当せず，届出等の手続きも必要ない。",
+"ゲノム編集については，組み込まれた遺伝子を交配により除去することが難しい植物種等では，クリスパー・キャス9とsgRNAの複合体をプロトプラストに直接導入し，植物体まで分化させる方法が開発されている。"
+],answer:3,
+explanation:"ゲノム編集においても，宿主ゲノムに外来遺伝子（人工ヌクレアーゼ遺伝子など）が残存している場合は，カルタヘナ法に基づく「遺伝子組換え生物等」に該当し，届出等の手続きが必要となる。最終産物から外来遺伝子が除去されていることが確認された場合のみ，規制対象外となる場合がある。「届出等の手続きも必要ない」という記述は誤り。"},
+
+{year:"令和7年度",no:"問23",
+text:"バイオインフォマティクスに関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"PubMedは，米国のNCBIがWWW上で提供している生命科学系の文献データベースである。",
+"KEGGは，分子進化系統樹の作成に用いられるソフトウェアである。",
+"FASTAとBLASTは，目的の塩基配列やタンパク質の配列と類似性を有する配列を検索するためのプログラムである。",
+"PDBは，タンパク質の立体構造に関するデータベースを提供している。",
+"jPOSTは，日本プロテオーム学会が提供するプロテオームに関するデータベースである。"
+],answer:1,
+explanation:"KEGG（Kyoto Encyclopedia of Genes and Genomes）は，遺伝子・タンパク質の機能，代謝経路，疾患，薬物などの統合データベースである。分子進化系統樹の作成に用いられるソフトウェアはMEGAやMrBayesなどであり，KEGGは系統樹作成ツールではない。"},
+
+{year:"令和7年度",no:"問24",
+text:"生体材料（バイオマテリアル）に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"バイオマテリアルとは，生体やその構成要素と直接あるいは間接に接触させることを目的に使用される材料であり，人工臓器やドラッグデリバリーシステムなどに利用されている。",
+"バイオマテリアルには，生体適合性（材料が生体に悪影響を与えないこと）が求められ，さらに用途に応じて，抗血栓性や機械的強度，耐久性などが求められる場合がある。",
+"手術で利用される縫合糸には生分解性が高い高分子である，ポリエチレンテレフタレートや6,6-ナイロンが用いられる。",
+"チタン材料は耐食性や機械特性に加え，優れた骨適合性により人工関節や人工歯根に用いられる。",
+"ドラッグデリバリーシステムでは，近年，リポソームなどの様々なナノサイズ薬物キャリアが開発されている。"
+],answer:2,
+explanation:"ポリエチレンテレフタレート（PET）や6,6-ナイロンは非生分解性の合成高分子であり，縫合糸として使用する場合は体内に残存する永久縫合糸となる。生分解性の縫合糸にはポリグリコール酸（PGA），ポリ乳酸（PLA），ポリジオキサノンなどが使用される。"},
+
+{year:"令和7年度",no:"問25",
+text:"バイオミメティクスに関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"フナクイムシが木に穴を開け，外壁を補強しながら掘り進むことにヒントを得て，トンネル工事に有用なシールド工法が開発された。",
+"オナモミなどの植物の種が動物の毛に付着することにヒントを得て，布同士を面的に着脱可能にする面ファスナーが開発された。",
+"サメのウロコが，小さな溝が3本並んだ「リブレット構造」により体表面で発生する渦の影響を抑え水の抵抗力を小さくすることにヒントを得て，競技用水着が開発された。",
+"ハスの葉の表面が，多数の微細な円錐状の突起により薄い水の膜によって覆われることにヒントを得て，常に表面を清潔に保つことができる住宅用外壁材が開発された。",
+"ヤモリの指に細かく枝分かれした毛がびっしり生えており，自重を支える粘着力をもつことにヒントを得た粘着テープが開発された。"
+],answer:3,
+explanation:"ハスの葉（ロータス効果）は，微細な突起構造により水をはじき（超撥水性），汚れを水滴とともに除去する自己洗浄効果を持つ。「薄い水の膜によって覆われる」という記述は誤りで，実際には水が玉状にはじかれて流れ落ちる現象がヒントになっている。"},
+
+{year:"令和7年度",no:"問26",
+text:"バイオレメディエーションに関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"バイオレメディエーションとは，生物を利用して汚染された環境を修復することである。",
+"バイオレメディエーションには，自然のプロセスを利用するためエネルギーをあまり必要としない，汚染現場等での汚染修復が可能，低濃度・広範囲の汚染に適用できるなどのメリットがある。",
+"バイオレメディエーションの1つであるバイオスパージングは，空気を送り込み汚染物質を除去する技術であり，主に重金属の除去に用いられる。",
+"バイオレメディエーションの1つであるファイトレメディエーションでは，植物を利用して環境修復を行う。",
+"バイオレメディエーションの1つであるバイオオーグメンテーションでは，他所から分解菌などを導入して環境修復を行う。"
+],answer:2,
+explanation:"バイオスパージングは，地下帯水層に空気（または酸素）を注入することで，好気性微生物による有機汚染物質（石油系炭化水素など）の分解を促進する技術である。重金属の除去に用いられるという記述は誤りで，主に揮発性有機化合物（VOC）や石油汚染の修復に用いられる。"},
+
+{year:"令和7年度",no:"問27",
+text:"植物と微生物の相互作用に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"植物の根の影響下にある根の周囲の土壌環境を根圏と呼び，植物と微生物との間で様々な相互作用が営まれている。",
+"植物中に共生する微生物をエンドファイトと呼び，根粒菌や菌根菌もエンドファイトに含まれる。",
+"根粒菌はマメ科植物の根の細胞中で増殖し，レグヘモグロビンにより大気中の窒素をアンモニアに変換する。",
+"樹木などの陸上植物のほとんどは根に菌根菌が共生しており，植物は菌根菌が吸収したリンなどの養分の供給を受ける代わりに光合成で得た糖類などを菌根菌に提供している。",
+"放線菌の中には，植物根に共生して根粒を形成し，窒素固定を行うものがある。"
+],answer:2,
+explanation:"根粒菌はマメ科植物の根に共生して根粒を形成し，大気中の窒素（N₂）をアンモニア（NH₃）に変換（窒素固定）する。この過程でレグヘモグロビンは根粒内の酸素濃度を調節して嫌気的条件を維持する役割を持つが，「レグヘモグロビンが窒素をアンモニアに変換する」という記述は誤り。窒素固定を行うのはニトロゲナーゼ酵素である。"},
+
+{year:"令和7年度",no:"問28",
+text:"自然界における元素の循環と回収に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"バクテリアリーチングは，銅やウランの採取に用いられる。",
+"炭素循環においては微生物によるメタン資化は起こらないのに対し，メタン生成菌の活動により生じたメタンの一部は大気中へ放出される。",
+"硝化菌はアンモニアを硝酸に変換することにより，窒素循環の重要なプロセスを担うが，硝酸態窒素は土壌粒子に吸着されにくいため流亡しやすい。",
+"硫黄循環では，硫黄酸化細菌による硫化水素の硫酸への酸化が起こる一方で，硫酸還元菌による硫酸の還元も起こる。",
+"湖沼のアオコ発生や内海での赤潮発生の原因として，生活排水中のリン酸塩の影響が問題視されてきた。"
+],answer:1,
+explanation:"炭素循環においてメタン資化細菌（メタノトロフ）は存在し，大気中や土壌中のメタンを酸化・資化することで，温室効果ガスであるメタンの削減に重要な役割を果たしている。「微生物によるメタン資化は起こらない」という記述は誤り。"},
+
+{year:"令和7年度",no:"問29",
+text:"抗体医薬に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"抗PD-1抗体（ニボルマブ）は，免疫チェックポイントを阻害することで抗腫瘍効果を発揮する。",
+"抗体医薬は，標的分子に対して高い特異性を持ち，がんや自己免疫疾患などの治療に利用されている。",
+"抗体医薬は，分子量が大きく安定性が高いため，経口投与されることが一般的である。",
+"抗IgE抗体（オマリズマブ）は，アレルギー反応の原因となるIgEと肥満細胞表面の受容体の結合を阻害する。",
+"抗HER2抗体（トラスツズマブ）は，がん細胞表面の受容体に結合し，内部へのシグナル伝達を阻害する。"
+],answer:2,
+explanation:"抗体医薬は分子量が大きい（約15万Da）タンパク質製剤であるため，消化管内で分解されやすく，経口投与では吸収・効果が得られない。そのため，静脈内投与や皮下投与など注射による投与が一般的である。「経口投与されることが一般的」という記述は誤り。"},
+
+{year:"令和7年度",no:"問30",
+text:"プロバイオティクスに関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"プロバイオティクスとは，アンチバイオティクス（抗生物質）に対して提案された用語であり，共生を意味するプロバイオシスを語源としている。",
+"プロバイオティクスには，腸内フローラのバランスを整える働きがある。",
+"プロバイオティクスは菌体成分が生理活性を有するので，生きている必要はない。",
+"ヨーグルトや乳酸菌飲料は，プロバイオティクスを含む食品の代表例である。",
+"一部のプロバイオティクスは，感染症やアレルギー性疾患の予防にも役立つとされている。"
+],answer:2,
+explanation:"プロバイオティクスの定義（FAO/WHO）は「適切な量を摂取した場合に，宿主に健康上の利益をもたらす生きた微生物」であり，生きた状態での摂取が要件とされている。「生きている必要はない」という記述は誤り。死菌（ポストバイオティクス）も効果を持つ場合があるが，それはプロバイオティクスとは区別される。"},
+
+{year:"令和7年度",no:"問31",
+text:"発酵・醸造に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"ビールの醸造では，大麦を蒸してからお湯に溶いて麦汁とし，冷却してから酵母を投入して発酵を行う。",
+"清酒の製造には，麹菌による糖化と酵母による発酵が同時に進行する並行複発酵が用いられる。",
+"微生物による発酵は食品保存にも役立つ。",
+"乳酸菌は，ヨーグルトだけでなく，味噌や醤油などの発酵食品にも利用される。",
+"発酵食品に利用される微生物には，酵母，カビ，細菌など多様な種類がある。"
+],answer:0,
+explanation:"ビールの醸造では，大麦を発芽させて麦芽（モルト）とし，乾燥・粉砕後に温湯（仕込み水）と混合して糖化（マッシング）を行い，麦汁（ワート）を得る。「大麦を蒸してからお湯に溶く」という記述は誤りで，蒸すのではなく発芽・乾燥の工程を経る。"},
+
+{year:"令和7年度",no:"問32",
+text:"2025年5月時点において，特定原材料8品目に含まれる食品は，アレルギー症状を引き起こす可能性が高いため，食品表示法により表示が義務付けられている。\n次のうち，特定原材料8品目に該当しないものはどれか。",
+choices:["卵","小麦","えび","バナナ","くるみ"],
+answer:3,
+explanation:"2025年5月時点の特定原材料8品目は，卵，乳，小麦，えび，かに，落花生（ピーナッツ），そば，くるみである（2023年3月にくるみが追加）。バナナは特定原材料に準ずる品目（任意表示）であり，義務表示の8品目には該当しない。"},
+
+{year:"令和7年度",no:"問33",
+text:"ゲノム編集に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"ゲノム編集技術の基本は，生物が持つゲノムの中の特定の場所を切断することである。",
+"ゲノム編集技術を品種改良に用いる利点の1つは，特定の遺伝子に突然変異を起こさせて，目的の性質を持つ品種を効率的に作ることができる点である。",
+"ゲノム編集用に通常使用されるクリスパー・キャス9は，化膿レンサ球菌に由来する酵素である。",
+"ゲノム編集ツールの1つであるクリスパー・キャス9は，タンパク質のDNA認識・結合ドメインによって標的配列に結合する。",
+"ゲノム編集では，目的の遺伝子以外も変異する可能性が指摘されており，「オフターゲット変異」と呼ばれている。"
+],answer:3,
+explanation:"クリスパー・キャス9（CRISPR/Cas9）は，ガイドRNA（sgRNA）によって標的DNA配列に誘導される。「タンパク質のDNA認識・結合ドメインによって標的配列に結合する」という記述は誤りで，標的認識はRNAとDNAの塩基対合（Watson-Crick型塩基対）によって行われる。タンパク質のドメインで標的認識するのはジンクフィンガーヌクレアーゼ（ZFN）やTALENの特徴である。"},
+
+{year:"令和7年度",no:"問34",
+text:"細胞内シグナル伝達系に関する次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"GTPが結合し，結合したGTPをGDPに加水分解する作用をもつ細胞内のタンパク質をGタンパク質と呼ぶ。",
+"cAMPは，細胞内でのシグナル伝達を担う二次メッセンジャーである。",
+"cAMPは，cAMPホスホジエステラーゼによりADPから生産される。",
+"シグナル分子には，細胞内で受容体と結合し，核内に到達するものもある。",
+"細胞膜を7回貫通するGタンパク質共役型受容体には，アドレナリン受容体などがある。"
+],answer:2,
+explanation:"cAMP（環状AMP）は，アデニル酸シクラーゼによりATPから合成される（ATP→cAMP+PPi）。「cAMPホスホジエステラーゼによりADPから生産される」という記述は誤りで，cAMPホスホジエステラーゼはcAMPをAMPに分解する（分解酵素）。"},
+
+{year:"令和7年度",no:"問35",
+text:"細胞周期に関連した次の記述のうち，最も不適切なものはどれか。",
+choices:[
+"細胞はG₁期に，細胞周期のサイクルをはずれて増殖を停止するG₀期（静止期）に入るかを決める。",
+"細胞周期は，S期→G₁期→M期→G₂期→S期の順番であり，G₁期とG₂期はそれぞれM期とS期に入るための準備と点検の時期である。",
+"M期の中期では，染色体は赤道面に並ぶ。",
+"細胞周期は，サイクリンとサイクリン依存性キナーゼが制御する。",
+"細胞周期は，DNA未複製チェックポイント，DNA損傷チェックポイント，紡錘体チェックポイントなどで誤りがないかチェックしたうえで進行する。"
+],answer:1,
+explanation:"細胞周期の正しい順番はG₁期→S期→G₂期→M期であり，「S期→G₁期→M期→G₂期→S期」という記述は誤り。G₁期はDNA合成（S期）に入るための準備期，G₂期はM期（分裂期）に入るための準備・点検期である。"}
 ];
 
-// ============================================================
-// 状態
-// ============================================================
-let answered = {};
-let isShuffle = false;
-let shuffleOrders = {};
-let activeFilter = 'all';
-let filteredQuestions = [];
-let current = 0;
+// =====================================================
+// 状態管理
+// =====================================================
+const GAS_URL_VAL=GAS_URL;
+let answered={};
+let isShuffle=false;
+let shuffleOrders={};
+let activeFilter='all';
+let filteredQuestions=[];
+let current=0;
 
-function qKey(q) { return q.year + '_' + q.no; }
+function qKey(q){return q.year+'_'+q.no;}
 
-function loadLocal() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) answered = JSON.parse(raw);
-  } catch(e) { answered = {}; }
+function loadLocal(){
+  try{const r=localStorage.getItem(STORAGE_KEY);if(r)answered=JSON.parse(r);}catch(e){answered={};}
 }
-
-function saveLocal() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(answered)); } catch(e) {}
+function saveLocal(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(answered));}catch(e){}
 }
-
-function setSyncStatus(state, text) {
-  document.getElementById('sync-dot').className = 'sync-dot ' + state;
-  document.getElementById('sync-text').textContent = text;
+function setSyncStatus(s,t){
+  document.getElementById('sync-dot').className='sync-dot '+s;
+  document.getElementById('sync-text').textContent=t;
 }
-
-// スプレッドシートから履歴を取得（起動時に呼ぶ）
-function loadFromSheet() {
-  setSyncStatus('syncing', '履歴をスプレッドシートから読み込み中...');
-  fetch(GAS_URL)
-    .then(r => r.json())
-    .then(rows => {
-      if (Array.isArray(rows) && rows.length > 1) {
-        // 最新の回答を優先するため行を順番に上書き
-        rows.slice(1).forEach(row => {
-          const [, year, no, correct, answeredIdx] = row;
-          if (!year || !no) return;
-          const key = year + '_' + no;
-          answered[key] = {
-            answeredIdx: Number(answeredIdx),
-            correct: correct === true || correct === 'TRUE' || correct === 'true'
-          };
+function loadFromSheet(){
+  setSyncStatus('syncing','履歴をスプレッドシートから読み込み中...');
+  fetch(GAS_URL_VAL)
+    .then(r=>r.json())
+    .then(rows=>{
+      if(Array.isArray(rows)&&rows.length>1){
+        rows.slice(1).forEach(row=>{
+          const[,year,no,correct,answeredIdx]=row;
+          if(!year||!no)return;
+          answered[year+'_'+no]={answeredIdx:Number(answeredIdx),correct:correct===true||correct==='TRUE'||correct==='true'};
         });
         saveLocal();
       }
-      setSyncStatus('ok', '同期済み');
-      render();
+      setSyncStatus('ok','同期済み');render();
     })
-    .catch(() => {
-      setSyncStatus('error', 'オフライン（ローカル履歴を使用中）');
-      render();
-    });
+    .catch(()=>{setSyncStatus('error','オフライン（ローカル履歴を使用中）');render();});
+}
+function saveToSheet(q,aIdx,correct){
+  setSyncStatus('syncing','保存中...');
+  fetch(GAS_URL_VAL,{method:'POST',body:JSON.stringify({year:q.year,no:q.no,correct,answered_idx:aIdx}),headers:{'Content-Type':'text/plain'}})
+    .then(r=>r.json())
+    .then(()=>setSyncStatus('ok','保存しました'))
+    .catch(()=>setSyncStatus('error','保存失敗（ローカルには記録済み）'));
 }
 
-// スプレッドシートに回答を送信
-function saveToSheet(q, answeredIdx, correct) {
-  setSyncStatus('syncing', '保存中...');
-  fetch(GAS_URL, {
-    method: 'POST',
-    body: JSON.stringify({ year: q.year, no: q.no, correct, answered_idx: answeredIdx }),
-    headers: { 'Content-Type': 'text/plain' }
-  })
-    .then(r => r.json())
-    .then(() => setSyncStatus('ok', '保存しました'))
-    .catch(() => setSyncStatus('error', '保存失敗（ローカルには記録済み）'));
-}
-
-// ============================================================
-// フィルター
-// ============================================================
-function buildFilters() {
-  const years = [...new Set(questions.map(q => q.year))].sort().reverse();
-  const row = document.getElementById('filter-row');
-  row.innerHTML = '';
-  const filters = [
-    { id: 'all',        label: 'すべて',       cls: '' },
-    { id: 'wrong',      label: '間違えた問題', cls: 'wrong-filter' },
-    { id: 'unanswered', label: '未回答',       cls: 'unanswered-filter' },
-  ];
-  filters.forEach(f => {
-    const btn = document.createElement('button');
-    btn.className = 'filter-btn ' + f.cls + (activeFilter === f.id ? ' active' : '');
-    btn.textContent = f.label;
-    btn.dataset.filter = f.id;
-    btn.onclick = () => setFilter(f.id);
-    row.appendChild(btn);
+function buildFilters(){
+  const years=[...new Set(questions.map(q=>q.year))].sort().reverse();
+  const row=document.getElementById('filter-row');
+  row.innerHTML='';
+  [{id:'all',label:'すべて',cls:''},{id:'wrong',label:'間違えた問題',cls:'wrong-f'},{id:'unanswered',label:'未回答',cls:'unanswered-f'}].forEach(f=>{
+    const btn=document.createElement('button');
+    btn.className='filter-btn '+f.cls+(activeFilter===f.id?' active':'');
+    btn.textContent=f.label;btn.dataset.filter=f.id;btn.onclick=()=>setFilter(f.id);row.appendChild(btn);
   });
-  years.forEach(y => {
-    const btn = document.createElement('button');
-    btn.className = 'filter-btn' + (activeFilter === y ? ' active' : '');
-    btn.textContent = y;
-    btn.dataset.filter = y;
-    btn.onclick = () => setFilter(y);
-    row.appendChild(btn);
+  years.forEach(y=>{
+    const btn=document.createElement('button');
+    btn.className='filter-btn'+(activeFilter===y?' active':'');
+    btn.textContent=y;btn.dataset.filter=y;btn.onclick=()=>setFilter(y);row.appendChild(btn);
   });
 }
-
-function setFilter(filter) {
-  activeFilter = filter;
-  current = 0;
-  shuffleOrders = {};
-  render();
+function setFilter(f){activeFilter=f;current=0;shuffleOrders={};render();}
+function applyFilter(){
+  if(activeFilter==='all')filteredQuestions=[...questions];
+  else if(activeFilter==='wrong')filteredQuestions=questions.filter(q=>{const h=answered[qKey(q)];return h&&!h.correct;});
+  else if(activeFilter==='unanswered')filteredQuestions=questions.filter(q=>!answered[qKey(q)]);
+  else filteredQuestions=questions.filter(q=>q.year===activeFilter);
 }
-
-function applyFilter() {
-  if (activeFilter === 'all') {
-    filteredQuestions = [...questions];
-  } else if (activeFilter === 'wrong') {
-    filteredQuestions = questions.filter(q => { const h = answered[qKey(q)]; return h && !h.correct; });
-  } else if (activeFilter === 'unanswered') {
-    filteredQuestions = questions.filter(q => !answered[qKey(q)]);
-  } else {
-    filteredQuestions = questions.filter(q => q.year === activeFilter);
+function getShuffleOrder(i){
+  if(!shuffleOrders[i]){
+    let o=questions[i].choices.map((_,j)=>j);
+    if(isShuffle)for(let k=o.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[o[k],o[j]]=[o[j],o[k]];}
+    shuffleOrders[i]=o;
   }
+  return shuffleOrders[i];
 }
-
-// ============================================================
-// 描画
-// ============================================================
-function getShuffleOrder(qIdx) {
-  if (!shuffleOrders[qIdx]) {
-    let order = questions[qIdx].choices.map((_, i) => i);
-    if (isShuffle) {
-      for (let i = order.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [order[i], order[j]] = [order[j], order[i]];
-      }
-    }
-    shuffleOrders[qIdx] = order;
-  }
-  return shuffleOrders[qIdx];
-}
-
-function render() {
-  applyFilter();
-  buildFilters();
-  updateStats();
-
-  const qa = document.getElementById('question-area');
-  const ea = document.getElementById('empty-area');
-
-  if (filteredQuestions.length === 0) {
-    qa.style.display = 'none';
-    ea.style.display = 'block';
-    document.getElementById('progress-text').textContent = '0問';
-    return;
-  }
-
-  qa.style.display = 'block';
-  ea.style.display = 'none';
-  if (current >= filteredQuestions.length) current = 0;
-
-  const q = filteredQuestions[current];
-  const qIdx = questions.indexOf(q);
-  const key = qKey(q);
-  const history = answered[key];
-
-  document.getElementById('q-meta').innerHTML =
-    '<span class="tag year">' + q.year + '</span><span class="tag">' + q.no + '</span>';
-  document.getElementById('q-text').textContent = q.text;
-  document.getElementById('progress-text').textContent = (current + 1) + ' / ' + filteredQuestions.length + ' 問';
-  document.getElementById('nav-center').textContent = (current + 1) + ' / ' + filteredQuestions.length;
-  document.getElementById('btn-prev').disabled = current === 0;
-  document.getElementById('btn-next').disabled = current === filteredQuestions.length - 1;
-
-  const labels = ['ア', 'イ', 'ウ', 'エ', 'オ'];
-  const order = getShuffleOrder(qIdx);
-  const choicesEl = document.getElementById('choices');
-  choicesEl.innerHTML = '';
-  order.forEach((origIdx, dispIdx) => {
-    const btn = document.createElement('button');
-    btn.className = 'choice';
-    btn.innerHTML = '<span class="choice-num">' + labels[dispIdx] + '</span><span>' + q.choices[origIdx] + '</span>';
-    if (history) {
-      btn.disabled = true;
-      if (origIdx === q.answer) btn.classList.add(history.answeredIdx === origIdx ? 'correct' : 'reveal');
-      else if (origIdx === history.answeredIdx) btn.classList.add('wrong');
-    } else {
-      btn.onclick = () => selectAnswer(q, qIdx, origIdx);
-    }
-    choicesEl.appendChild(btn);
+function render(){
+  applyFilter();buildFilters();updateStats();
+  const qa=document.getElementById('question-area'),ea=document.getElementById('empty-area');
+  if(filteredQuestions.length===0){qa.style.display='none';ea.style.display='block';document.getElementById('progress-text').textContent='0問';return;}
+  qa.style.display='block';ea.style.display='none';
+  if(current>=filteredQuestions.length)current=0;
+  const q=filteredQuestions[current],qIdx=questions.indexOf(q),key=qKey(q),history=answered[key];
+  document.getElementById('q-meta').innerHTML='<span class="tag year">'+q.year+'</span><span class="tag">'+q.no+'</span>';
+  document.getElementById('q-text').textContent=q.text;
+  document.getElementById('progress-text').textContent=(current+1)+' / '+filteredQuestions.length+' 問';
+  document.getElementById('nav-center').textContent=(current+1)+' / '+filteredQuestions.length;
+  document.getElementById('btn-prev').disabled=current===0;
+  document.getElementById('btn-next').disabled=current===filteredQuestions.length-1;
+  const labels=['①','②','③','④','⑤'],order=getShuffleOrder(qIdx);
+  const ce=document.getElementById('choices');ce.innerHTML='';
+  order.forEach((origIdx,dispIdx)=>{
+    const btn=document.createElement('button');
+    btn.className='choice';
+    btn.innerHTML='<span class="choice-num">'+labels[dispIdx]+'</span><span>'+q.choices[origIdx]+'</span>';
+    if(history){
+      btn.disabled=true;
+      if(origIdx===q.answer)btn.classList.add(history.answeredIdx===origIdx?'correct':'reveal');
+      else if(origIdx===history.answeredIdx)btn.classList.add('wrong');
+    }else{btn.onclick=()=>selectAnswer(q,qIdx,origIdx);}
+    ce.appendChild(btn);
   });
-
-  const ra = document.getElementById('result-area');
-  if (history) {
-    ra.style.display = 'block';
-    ra.innerHTML =
-      '<div class="result-label ' + (history.correct ? 'correct' : 'wrong') + '">' +
-        '<span class="result-icon">' + (history.correct ? '○' : '×') + '</span>' +
-        (history.correct ? '正解！' : '不正解。正しい選択肢を確認してください。') +
-      '</div>' +
-      '<div class="explanation">' +
-        '<div class="explanation-title">解説</div>' +
-        q.explanation +
-      '</div>';
-  } else {
-    ra.style.display = 'none';
-  }
+  const ra=document.getElementById('result-area');
+  if(history){
+    ra.style.display='block';
+    ra.innerHTML='<div class="result-label '+(history.correct?'correct':'wrong')+'"><span class="result-icon">'+(history.correct?'○':'×')+'</span>'+(history.correct?'正解！':'不正解。正しい選択肢を確認してください。')+'</div><div class="explanation"><div class="explanation-title">解説</div>'+q.explanation+'</div>';
+  }else{ra.style.display='none';}
 }
-
-function selectAnswer(q, qIdx, origIdx) {
-  const key = qKey(q);
-  if (answered[key]) return;
-  const correct = origIdx === q.answer;
-  answered[key] = { answeredIdx: origIdx, correct };
-  saveLocal();
-  saveToSheet(q, origIdx, correct);
-  render();
+function selectAnswer(q,qIdx,origIdx){
+  const key=qKey(q);if(answered[key])return;
+  const correct=origIdx===q.answer;
+  answered[key]={answeredIdx:origIdx,correct};
+  saveLocal();saveToSheet(q,origIdx,correct);render();
 }
-
-function move(dir) {
-  current = Math.max(0, Math.min(filteredQuestions.length - 1, current + dir));
-  render();
+function move(dir){current=Math.max(0,Math.min(filteredQuestions.length-1,current+dir));render();}
+function updateStats(){
+  const keys=Object.keys(answered),total=keys.length,c=keys.filter(k=>answered[k].correct).length;
+  document.getElementById('h-answered').textContent=total;
+  document.getElementById('h-correct').textContent=c;
+  document.getElementById('h-rate').textContent=total>0?Math.round(c/total*100)+'%':'—';
 }
-
-function updateStats() {
-  const keys = Object.keys(answered);
-  const total = keys.length;
-  const correctCount = keys.filter(k => answered[k].correct).length;
-  document.getElementById('h-answered').textContent = total;
-  document.getElementById('h-correct').textContent = correctCount;
-  document.getElementById('h-rate').textContent = total > 0 ? Math.round(correctCount / total * 100) + '%' : '—';
-}
-
-function showResetModal() { document.getElementById('reset-modal').classList.add('show'); }
-function hideResetModal() { document.getElementById('reset-modal').classList.remove('show'); }
-function resetAll() {
-  answered = {};
-  shuffleOrders = {};
-  saveLocal();
-  hideResetModal();
-  setSyncStatus('ok', 'リセット完了（スプレッドシートの記録は残ります）');
-  render();
-}
-
-document.getElementById('shuffle-toggle').addEventListener('change', function() {
-  isShuffle = this.checked;
-  shuffleOrders = {};
-  render();
-});
-
-// 起動
-loadLocal();
-render();
-loadFromSheet();
+function showResetModal(){document.getElementById('reset-modal').classList.add('show');}
+function hideResetModal(){document.getElementById('reset-modal').classList.remove('show');}
+function resetAll(){answered={};shuffleOrders={};saveLocal();hideResetModal();setSyncStatus('ok','リセット完了');render();}
+document.getElementById('shuffle-toggle').addEventListener('change',function(){isShuffle=this.checked;shuffleOrders={};render();});
+loadLocal();render();loadFromSheet();
 </script>
 </body>
 </html>
