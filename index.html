@@ -627,8 +627,7 @@ function selectAnswer(q,qIdx,origIdx){
   const correct=origIdx===q.answer;
   answered[key]={answeredIdx:origIdx,correct};
   saveToSheet(q,origIdx,correct);
-  // 画面には何も表示しない（ボタンを無効化するだけ）
-  document.querySelectorAll('.choice').forEach(b=>b.disabled=true);
+  render();
 }
 function move(dir){current=Math.max(0,Math.min(filteredQuestions.length-1,current+dir));render();}
 function updateStats(){
